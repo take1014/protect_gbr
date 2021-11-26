@@ -43,6 +43,7 @@ class TF_GBR_Dataset(data.Dataset):
         img = img / 255
         img = torch.from_numpy(img).permute(2, 0, 1)    #(H, W, C) -> (C, H, W)
 
+        # TODO: Implement transform method here.
         if self.transform:
             pass
 
