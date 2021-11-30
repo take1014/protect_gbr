@@ -48,6 +48,7 @@ class TF_GBR_Dataset(data.Dataset):
         anno_data = self.data[ndx]
         # read image
         img = cv2.imread(anno_data['img_path'], cv2.IMREAD_UNCHANGED)
+        h, w, c = img.shape
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img,self.resize_sz)
         img = np.array(img, dtype=np.float32)
@@ -62,7 +63,8 @@ class TF_GBR_Dataset(data.Dataset):
         # get location data
         loc_list = []
         for d in anno_data['loc']:
-            loc_list.append(torch.tensor([d['x'], d['y'], d['width'], d['height']], dtype=torch.float32))
+            # append normalized x, y, width, height
+            loc_list.append(torch.tensor([d['x']/w, d['y']/h, d['width']/w, d['height']/h], dtype=torch.float32))
 
         if len(loc_list) > 0:
             loc_list = torch.stack(loc_list)
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     img, loc_list = dataset.__getitem__(100)
     print(type(img))
 
-    dataloader = data.DataLoader(dataset, batch_size=32, shuffle=True, collate_fn = custom_collate_fn)
+    dataloader = data.DataLoader(dataset, batch_size=cfg.batch_sz, shuffle=True, collate_fn = custom_collate_fn)
     batch_iterator = iter(dataloader)
     images, targets = next(batch_iterator)
     print(images.shape)
