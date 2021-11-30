@@ -7,7 +7,8 @@ class Config():
         self.img_width    = 1280
         self.img_height   = 720
         self.img_channels = 3
-        self.resize_CHW   = (3, 32*9, 32*16)
+        self.resize_sz   = (32*16, 32*9)        #(W, H)
+        self.batch_sz     = 32
 
 if __name__ == "__main__":
     config = Config()

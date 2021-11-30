@@ -11,6 +11,17 @@ import torch
 import torch.utils.data as data
 from config import Config
 
+def custom_collate_fn(batch):
+    targets = []
+    imgs = []
+    for sample in batch:
+        # sample[0] : image
+        # sample[1] : target
+        imgs.append(sample[0])
+        targets.append(torch.FloatTensor(sample[1]))
+    imgs = torch.stack(imgs, dim=0)
+    return imgs, targets
+
 def get_annotation_list(dataset_dir):
     image_dir  = os.path.join(dataset_dir, 'train_images')
     # read csv
@@ -63,7 +74,12 @@ class TF_GBR_Dataset(data.Dataset):
 if __name__ == "__main__":
     cfg = Config()
     dataset_dir = cfg.work_dir
-    dataset = TF_GBR_Dataset(dataset_dir)
+    dataset = TF_GBR_Dataset(dataset_dir, resize_sz = cfg.resize_sz)
     img, loc_list = dataset.__getitem__(100)
     print(type(img))
-    print(type(loc_list))
+
+    dataloader = data.DataLoader(dataset, batch_size=32, shuffle=True, collate_fn = custom_collate_fn)
+    batch_iterator = iter(dataloader)
+    images, targets = next(batch_iterator)
+    print(images.shape)
+    print(targets[0].shape)
