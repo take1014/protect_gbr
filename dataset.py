@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import torch
 import torch.utils.data as data
+from config import Config
 
 def get_annotation_list(dataset_dir):
     image_dir  = os.path.join(dataset_dir, 'train_images')
@@ -60,7 +61,8 @@ class TF_GBR_Dataset(data.Dataset):
         return img, loc_list
 
 if __name__ == "__main__":
-    dataset_dir = "/home/take/fun/dataset/kaggle/tensorflow-great-barrier-reef"
+    cfg = Config()
+    dataset_dir = cfg.work_dir
     dataset = TF_GBR_Dataset(dataset_dir)
     img, loc_list = dataset.__getitem__(100)
     print(type(img))

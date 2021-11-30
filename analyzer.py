@@ -6,6 +6,7 @@ import ast
 import pandas as pd
 from tqdm import tqdm
 from dataset import get_annotation_list
+from config import Config
 
 def draw_bounding_box(img, loc_list):
     for loc in loc_list:
@@ -33,8 +34,8 @@ def output_bbox_img(anno_list):
         cv2.imwrite(os.path.join(save_folder_path, '{}.jpg'.format(str(i).zfill(5))), img)
 
 if __name__ == '__main__':
-    dataset_dir = "/home/take/fun/dataset/kaggle/tensorflow-great-barrier-reef"
-
+    cfg = Config()
+    dataset_dir = cfg.work_dir
     # read csv
     df = pd.read_csv(os.path.join(dataset_dir, 'train.csv'))
 

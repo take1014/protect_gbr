@@ -3,6 +3,7 @@
 
 class Config():
     def __init__(self):
+        self.work_dir     = "/home/take/fun/dataset/kaggle/tensorflow-great-barrier-reef"
         self.img_width    = 1280
         self.img_height   = 720
         self.img_channels = 3
